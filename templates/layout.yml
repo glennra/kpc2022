@@ -1,0 +1,13 @@
+---
+# Adapted from https://github.com/sandhose/pandoc-invoices
+# Typography and layout
+#seriffont: Hoefler Text
+#sansfont: Helvetica Neue
+#seriffont: Times New Roman
+sansfont: Arial
+seriffont: Comic Sans MS
+#sansfont: Comic Sans MS
+fontsize: 10pt
+#geometry: a4paper, left=43mm, right=43mm, top=51mm, bottom=17mm
+geometry: a4paper, left=23mm, right=23mm, top=21mm, bottom=17mm
+# letterhead: true # To include personalized letterheads - see template.tex

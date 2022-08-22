@@ -1,0 +1,23 @@
+---
+name: Customer4 Inc.
+code: C4
+invoice_date: 20210531
+# the invoice_id will be generated from the date and the id
+
+service:
+- description: Software development services counter world domination project (51.5 hours)
+  date: 31/05/2021
+  amount: 16869.77
+  account: "income:z:z_in_software_development"
+  details:
+    - 02/05 4.50 Just coding
+    - 03/05 5.75 Just coding
+    - 06/05 5.50 Just coding
+    - 07/05 6.75 Just coding
+    - 17/05 5.50 Just coding 
+    - 30/05 10.50 Just coding furiously
+   
+- description: Transfer fee
+  date: 31/05/2021
+  amount: 25.00
+  account: "income:z:z_in_software_development"

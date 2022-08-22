@@ -1,0 +1,10 @@
+---
+suppliers:
+  - name: Landlord 
+    code: LL
+    address: |
+      Some place
+      RD 0
+      Thames
+    gst_number: 01-200-003
+    bank_acc: 00-0000-0000000-00

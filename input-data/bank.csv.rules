@@ -1,0 +1,70 @@
+# skip the headings line:
+skip 1
+
+# use the first three CSV fields for hledger's transaction date, description and amount:
+#Type,Details,Particulars,Code,Reference,Amount,Date,ForeignCurrencyAmount,ConversionCharge
+
+fields type,details,particulars,bankcode,reference,amount,date,fc_amount,conversioncharge
+
+description %2 %3 %4 %5
+
+date-format %-d/%-m/%Y
+
+account1 assets:benevolent_bank
+
+# matching on %description doesn't seem to work
+
+if %particulars Data Charge.*
+    account2 income:s:in_data_charges
+
+if %details Customer3
+    account2 income:s:s_in_software_development
+
+if Customer4
+    account2 income:z:z_in_software_development
+
+if %details Monthly A/C Fee
+    account2 expenses:e:bank_charges
+
+if %particulars Rent.*
+    account2 expenses:s:rent
+
+if %details Customer1
+    account2 income:s:in_web_hosting
+
+if 4\*\*\*-.*
+    account2 liabilities:credit_card
+
+if Hosting
+    account2 expenses:s:ex_web_hosting
+
+if Supplier1
+    account2 expenses:s:ex_data_charges
+
+if Supplier2
+    account2 expenses:s:purchases_for_clients
+
+if Technologies Supplier
+    account2 expenses:s:computer_equipment
+
+if Drawings
+    account2 equity:shareholders_salaries:drawings
+
+if Wireless Supplier
+    account2 expenses:s:purchases_for_clients
+
+if Rescue Heli
+    account2 equity:shareholders_salaries:donations
+
+if
+%details Inland Revenue Dept
+%particulars Gst
+    account2 liabilities:GST to/from IRD
+
+if Acc
+    account2 expenses:s:insurance
+
+if Furniture Supplier
+    account2 expenses:s:office_equipment
+
+

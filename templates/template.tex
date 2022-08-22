@@ -1,0 +1,190 @@
+%!TEX TS-program = xelatex
+%!TEX encoding = UTF-8 Unicode
+%! Adapted from https://github.com/sandhose/pandoc-invoices
+
+\documentclass[$fontsize$, a4paper]{article}
+
+% LAYOUT
+%--------------------------------
+\usepackage{geometry} 
+\geometry{$geometry$}
+
+% No page numbers
+\pagenumbering{gobble}
+
+% Left align
+\usepackage[document]{ragged2e}
+
+$if(letterhead)$
+  % To include the letterhead
+  \usepackage{wallpaper}
+  \ULCornerWallPaper{1}{letterhead.pdf}
+$endif$
+
+% TYPOGRAPHY
+%--------------------------------
+\usepackage{fontspec} 
+\usepackage{xunicode}
+\usepackage{xltxtra}
+
+% converts LaTeX specials (quotes, dashes etc.) to Unicode
+\defaultfontfeatures{Mapping=tex-text}
+\setromanfont [Ligatures={Common}, Numbers={OldStyle}]{$seriffont$}
+\setsansfont[Scale=0.9]{$sansfont$}
+
+% Set paragraph break
+\setlength{\parskip}{1em}
+
+% Custom ampersand
+\newcommand{\amper}{{\fontspec[Scale=.95]{$seriffont$}\selectfont\itshape\&}}
+
+$if(seriffont)$
+\setmainfont[SmallCapsFeatures={LetterSpace=5,Letters=SmallCaps}]{$seriffont$}
+$endif$
+$if(sansfont)$
+    \setsansfont{$sansfont$}
+$endif$
+
+% Command required by how Pandoc handles the list conversion
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+% TABLE CUSTOMIZATION
+%--------------------------------
+%\usepackage{tabular}
+\usepackage{spreadtab}
+\usepackage[compact]{titlesec} % For customizing title sections
+\titlespacing*{\section}{0pt}{3pt}{-7pt} % Remove margin bottom from the title
+\usepackage{arydshln} % For the dotted line on the table
+\renewcommand{\arraystretch}{1.5} % Apply vertical padding to table cells
+\usepackage{hhline} % For single-cell borders
+\usepackage{enumitem} % For customizing lists
+\setlist{nolistsep} % No whitespace around list items
+\setlist[itemize]{leftmargin=0.5cm} % Reduce list left indent
+\setlength{\tabcolsep}{9pt} % Larger gutter between columns
+\usepackage{graphicx}
+\usepackage{adjustbox}
+%\usepackage{showframe}   %% just for demo
+
+% LANGUAGE
+%--------------------------------
+$if(lang)$
+\usepackage{polyglossia}
+\setmainlanguage{$polyglossia-lang.name$}
+$endif$
+
+% PDF SETUP
+%--------------------------------
+\usepackage[xetex, bookmarks, colorlinks, breaklinks]{hyperref}
+\hypersetup
+{
+  pdfauthor={$my_name$},
+  pdfsubject=Invoice Nr. $invoice_id$,
+  pdftitle=Invoice Nr. $invoice_id$,
+  linkcolor=blue,
+  citecolor=blue,
+  filecolor=black,
+  urlcolor=blue
+}
+
+% To display custom date
+% \usepackage[nodayofweek]{datetime}
+% \newdate{date}{01}{12}{1867}
+% \date{\displaydate{date}}
+% Use this instead of \today: % \displaydate{date}
+
+% DOCUMENT
+%--------------------------------
+\begin{document}
+\section*{\huge \textbf{Tax Invoice} \hfill \normalfont \normalsize }
+\vspace{0.5em}
+Invoice to:\\
+\hspace{10mm}
+\begin{minipage}[t]{0.3\textwidth}
+  \vspace{1pt}
+  \normalsize \sffamily
+  $name$\\
+  $for(address)$
+  $address$\\
+  $endfor$
+  \end{minipage}%
+\begin{minipage}[t]{0.3\textwidth}
+  \vspace{1mm}
+  \normalsize \sffamily
+  Invoice date\\
+  $invoice_date$\\
+  \vspace{2mm}
+  Invoice number\\
+  $invoice_id$\\
+  \end{minipage}
+\hfill
+\begin{minipage}[t]{0.22\textwidth}
+  \textbf{$my_name$}\\
+  \normalsize
+  $for(my_address)$
+  $my_address$\\
+  $endfor$
+  \vspace{3mm}
+  $email$\\
+  $phone$\\
+  \vspace{5mm}
+  GST No. $gst_number$\\
+\end{minipage}
+
+\vspace{1em}
+
+\normalsize
+
+%\section*{\textsc{Tax Invoice} \hfill \textsc{\ ref: $invoice-nr$}}
+%\footnotesize
+%\newcounter{pos}
+%\setcounter{pos}{0}
+\STautoround*{2} % Get spreadtab to always display the decimal part
+$if(commasep)$\STsetdecimalsep{.}$endif$ % Use dot as decimal separator
+
+% See this to get $$ symbols in the spreadtab table
+% https://tex.stackexchange.com/questions/520586/values-in-a-table-or-spreadtab-table-given-to-2-decimal-places
+
+\begin{spreadtab}{{tabular}[t t t]{p{0.1\textwidth}p{0.7\textwidth}p{0.1\textwidth}}}
+  \hdashline[1pt/1pt]
+  @ \noalign{\vskip 2mm} \textbf{Date} & @ \textbf{Description} \hfill & @ \textbf{Amount $currency$} \\ \hline
+  $for(service)$ @ \noalign{\vskip 2mm}  $service.date$
+  & @ $service.description$ 
+        $if(service.details)$\newline \begin{itemize} 
+          $for(service.details)$\scriptsize \item $service.details$ 
+          $endfor$ \end{itemize}
+          $endif$ & $service.amount$\\$endfor$ \noalign{\vskip 3mm} \hline
+  $if(GST)$
+    @ & @ \multicolumn{1}{r}{Subtotal:}                & :={sum(c1:[0,-1])} \\ \hhline{~~-}
+    @ & @ \multicolumn{1}{r}{GST $GST$\%:}               & $GST$/100*[0,-1] \\ \hhline{~~-}
+  $endif$
+  @ & @ \multicolumn{1}{r}{\textbf{Total:}}   & \textbf{:={$if(GST)$[0,-1]+[0,-2]$else$sum(c1:[0,-1])$endif$}} \\ \hhline{~~-}
+\end{spreadtab}
+
+\vspace{15mm}
+
+%\sffamily
+%\small
+%$closingnote$
+Terms: $payment_terms$
+
+Payment information
+
+Bank: $bank_name$
+
+Account name: $my_name$
+
+Account No.: $bank_acc_no$
+
+Reference: $invoice_id$
+
+\medskip
+
+\IfFileExists{signature.pdf}
+{
+      \includegraphics[height=3.5\baselineskip]{signature.pdf} \par
+}
+
+%$my_name$
+
+\end{document}

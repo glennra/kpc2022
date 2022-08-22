@@ -1,0 +1,33 @@
+---
+# using the customer code as the dict key
+C1:
+  name: Customer 1 Ltd.
+  code: C1
+  gst_code: S
+  address:
+  - Some where
+  - Near by
+  - Thames 0101
+C2:
+  name: Customer 2
+  code: C2
+  gst_code: S
+  address:
+    - Near by
+    - RD1
+    - Waikato
+C3:
+  name: Customer 3 Ltd.
+  code: C3
+  gst_code: S
+  address:
+  - Far away
+  - But still in NZ
+  - Auckland
+C4:
+  name: Customer 4 Inc.
+  code: C4
+  gst_code: Z
+  address:
+  - Some place
+  - Overseas

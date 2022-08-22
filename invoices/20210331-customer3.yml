@@ -1,0 +1,13 @@
+---
+name: Customer3 Ltd.
+code: C3
+invoice_date: 20210331
+# the invoice_id will be generated from the date and the id
+
+# The gst code should not change within an invoice, so the code should be per client, rather than per service.
+# The gst code will be used to determine the GST rate (0% or 15%) and to set the receivables account.
+service:
+- description: Software development services for world domination project (10 hours)
+  date: 31/03/2021
+  amount: 26322.79
+  account: "income:s:s_in_software_development"

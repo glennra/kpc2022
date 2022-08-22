@@ -1,0 +1,46 @@
+; Declare top level accounts, setting their types and display order
+account assets      ; type:A, things I own
+account liabilities ; type:L, things I owe
+account equity      ; type:E, net worth, A - L
+account income      ; type:R, money sources
+account expenses    ; type:X, money sinks
+
+; virtual posting rules for split accounts and GST
+; (1-(1/1.15)) = 3/23 = 0.1304348
+
+; split 50% farm expenses GST included
+= proportion:s:s_ex_farm
+    (expenses:s:s_ex_farm)            *0.5
+    (equity:shareholders_salaries:purchases_on_behalf)    *0.5
+
+; split 50% farm expenses no GST
+= proportion:z:z_ex_farm
+    (expenses:z:z_ex_farm)            *0.5
+    (equity:shareholders_salaries:purchases_on_behalf)    *0.5
+
+; split 30% expenses GST excluded
+= proportion:z:z_cleaning
+    (expenses:z:z_cleaning)           *0.3
+    (equity:shareholders_salaries:purchases_on_behalf)    *0.7
+
+; split 30% utilities
+= proportion:s:utilities
+    (expenses:s:utilities)            *0.3
+    (equity:shareholders_salaries:purchases_on_behalf)    *0.7
+
+= income:s:in_data_charges
+     (assets:receivables)           *-1
+
+= income:s:in_web_hosting
+     (assets:receivables)           *-1
+
+= income
+     (assets:receivables)           *1
+     (equity:balancing)             *-1
+
+= income:s
+     (liabilities:GST:collected)    *0.1304348
+
+= expenses:s
+     (liabilities:GST:paid)         *0.1304348
+

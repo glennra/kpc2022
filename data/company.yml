@@ -1,0 +1,14 @@
+---
+my_name: My Company Ltd
+my_address:
+- The address of 
+- The registered office
+- Paeroa 90210
+email: user@examples.com
+phone: +64 28 100 0001
+gst_number: 00-000-000
+bank_acc_name: My Company Ltd
+bank_name:  Big Bank New Zealand Limited (SWIFT code BIGNZL01)
+bank_acc_no: 06-0000-0000000-00
+currency: NZD
+payment_terms: Net 20 EOM
