@@ -1,6 +1,6 @@
 # kpc2022
 
-This the code and sample data from my Kiwi PyCon XI (2022) talk "Plain text accounting for fun and profit".
+This is the sample data and code from my Kiwi PyCon XI (2022) talk "Plain text accounting for fun and profit".
 
 I use this for creating invoices, calculating GST and preparing data for my accountant. It is specifically for New Zealand but I suppose it could easily be adapted for another country.
 
